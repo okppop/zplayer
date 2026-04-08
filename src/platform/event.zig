@@ -4,7 +4,7 @@ pub const Event = union(enum) {
     quit,
     other,
 
-    fn poll() ?Event {
+    pub fn poll() ?Event {
         var event: sdl3.SDL_Event = undefined;
         if (sdl3.SDL_PollEvent(&event)) {
             return switch (event.type) {

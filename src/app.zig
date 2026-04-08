@@ -8,6 +8,7 @@ pub const Config = struct {
 };
 
 const Self = @This();
+
 window: platform.Window,
 is_running: bool,
 
@@ -29,4 +30,38 @@ pub fn init(config: Config) !Self {
         .window = window,
         .is_running = true,
     };
+}
+
+pub fn deinit(self: *Self) !void {
+    try self.window.deinit();
+    try platform.deinit();
+}
+
+pub fn handle_event(self: *Self, event: platform.Event) void {
+    switch (event) {
+        .quit => self.is_running = false,
+        .other => {},
+    }
+}
+
+pub fn run(self: *Self) !void {
+    while (self.is_running) {
+        while (platform.Event.poll()) |event| {
+            self.handle_event(event);
+            try self.update();
+            try self.render();
+        }
+    }
+}
+
+pub fn update(_: *Self) !void {}
+
+pub fn render(self: *Self) !void {
+    try self.window.clear(.{
+        .r = 255,
+        .g = 0,
+        .b = 0,
+        .a = 255,
+    });
+    try self.window.present();
 }
