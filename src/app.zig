@@ -32,9 +32,9 @@ pub fn init(config: Config) !Self {
     };
 }
 
-pub fn deinit(self: *Self) !void {
-    try self.window.deinit();
-    try platform.deinit();
+pub fn deinit(self: *Self) void {
+    self.window.deinit();
+    platform.deinit();
 }
 
 pub fn handle_event(self: *Self, event: platform.Event) void {

@@ -11,8 +11,7 @@ pub const Event = union(enum) {
                 sdl3.SDL_EVENT_QUIT => .quit,
                 else => .other,
             };
-        } else {
-            return null;
         }
+        return null;
     }
 };

@@ -8,4 +8,6 @@ pub fn init() !void {
     try std.testing.expect(sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO));
 }
 
-pub const deinit = sdl3.SDL_Quit();
+pub fn deinit() void {
+    sdl3.SDL_Quit();
+}

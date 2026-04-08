@@ -27,7 +27,7 @@ pub fn init(title: [:0]const u8, width: i32, height: i32, is_resizable: bool) !S
     };
 }
 
-pub fn deinit(self: *Self) !void {
+pub fn deinit(self: *Self) void {
     sdl3.SDL_DestroyWindow(self.window);
     sdl3.SDL_DestroyRenderer(self.renderer);
 }
