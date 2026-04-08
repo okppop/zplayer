@@ -2,9 +2,6 @@ const sdl3 = @import("c.zig").sdl3;
 const std = @import("std");
 
 const Self = @This();
-
-const a: fn () void = undefined;
-
 window: *sdl3.SDL_Window,
 renderer: *sdl3.SDL_Renderer,
 

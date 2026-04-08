@@ -1,4 +1,4 @@
-pub const window = @import("window.zig");
+pub const Window = @import("window.zig");
 pub const Event = @import("event.zig").Event;
 
 const sdl3 = @import("c.zig").sdl3;
