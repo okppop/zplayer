@@ -6,6 +6,10 @@ pub const RingBufferError = error{
     BufferFull,
 };
 
+/// RingBuffer is a fixed size ring buffer implementation.
+///
+/// It never grow, return `RingBufferError` when `push()` in full or `pop()` in empty.
+/// It is not a concurrency safe implementation also, use with caution.
 pub fn RingBuffer(comptime T: type) type {
     return struct {
         const Self = @This();
