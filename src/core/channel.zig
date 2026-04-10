@@ -1,7 +1,6 @@
 const std = @import("std");
 const Allocator = std.mem.Allocator;
 const RingBuffer = @import("ring_buffer.zig").RingBuffer;
-const RingBufferError = @import("ring_buffer.zig").RingBufferError;
 
 pub const ChannelError = error{
     ChannelClosed,
@@ -32,6 +31,17 @@ pub fn Channel(comptime T: type) type {
             allocator.destroy(self);
         }
 
+        pub fn try_push(self: *Self, item: T) ChannelError!bool {
+            self.mu.lock();
+            defer self.mu.unlock();
+            if (self.is_closed) return ChannelError.ChannelClosed;
+            if (self.queue.is_full()) return false;
+
+            self.queue.push(item) catch unreachable;
+            self.not_empty.signal();
+            return true;
+        }
+
         pub fn push(self: *Self, item: T) ChannelError!void {
             self.mu.lock();
             defer self.mu.unlock();
@@ -42,6 +52,17 @@ pub fn Channel(comptime T: type) type {
 
             self.queue.push(item) catch unreachable;
             self.not_empty.signal();
+        }
+
+        pub fn try_pop(self: *Self) ChannelError!?T {
+            self.mu.lock();
+            defer self.mu.unlock();
+            if (self.is_closed) return ChannelError.ChannelClosed;
+            if (self.queue.is_empty()) return null;
+
+            const item = self.queue.pop() catch unreachable;
+            self.not_full.signal();
+            return item;
         }
 
         pub fn pop(self: *Self) ChannelError!T {
