@@ -12,6 +12,6 @@ pub fn init() !Self {
     };
 }
 
-pub fn deinit(self: Self) void {
+pub fn deinit(self: *Self) void {
     c.av_packet_free(&self.ptr);
 }
